@@ -1,5 +1,4 @@
-# oxfordrandomwords
-
+# Random Translation Generator
 ## Project setup
 ```
 npm install
