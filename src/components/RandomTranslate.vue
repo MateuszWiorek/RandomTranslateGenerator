@@ -1,0 +1,133 @@
+<template>
+    <div class="div_center">
+        <h2>{{ word.name }}</h2>
+        <ul>
+            <li v-for="translatedWord in word.values" :key="translatedWord"><span> {{translatedWord}}</span></li>
+        </ul>
+        <button @click="generateRandomWord" class="btn btn-1 btn-sep">Generate</button>
+    </div>
+</template>
+
+<script>
+    import randomWords from 'random-words';
+
+    export default {
+        name: 'RandomTranslate',
+        data() {
+            return {
+                word: this.generateRandomWord()
+            }
+        },
+        methods: {
+            async generateRandomWord() {
+                let wordToTranslate = {'name': randomWords(), 'values': []};
+                fetch('https://api.mymemory.translated.net/get?q=' + wordToTranslate.name + '!&langpair=en|pl')
+                    .then(response => response.json())
+                    .then(data => {
+                            wordToTranslate.values.push(data.responseData.translatedText);
+                            this.word = wordToTranslate;
+                        }
+                    );
+            }
+        }
+    }
+</script>
+
+<style scoped>
+    h3 {
+        margin: 40px 0 0;
+    }
+    h2 {
+        font-size: 4rem;
+    }
+    span{
+        font-size: 2rem;
+    }
+    ul {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    li {
+        display: inline-block;
+        margin: 0 10px;
+    }
+
+    .btn {
+        border: none;
+        font-family: 'Lato';
+        font-size: inherit;
+        color: inherit;
+        background: none;
+        cursor: pointer;
+        padding: 25px 80px;
+        display: inline-block;
+        margin: 15px 30px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-weight: 700;
+        outline: none;
+        position: relative;
+        -webkit-transition: all 0.3s;
+        -moz-transition: all 0.3s;
+        transition: all 0.3s;
+    }
+
+    .btn:after {
+        content: '';
+        position: absolute;
+        z-index: -1;
+        -webkit-transition: all 0.3s;
+        -moz-transition: all 0.3s;
+        transition: all 0.3s;
+    }
+
+    /* Pseudo elements for icons */
+    .btn:before {
+        font-family: 'FontAwesome';
+        speak: none;
+        font-style: normal;
+        font-weight: normal;
+        font-variant: normal;
+        text-transform: none;
+        line-height: 1;
+        position: relative;
+        -webkit-font-smoothing: antialiased;
+    }
+
+
+    /* Icon separator */
+    .btn-sep {
+        /*padding: 25px 60px 25px 120px;*/
+    }
+
+    .btn-sep:before {
+        background: rgba(0,0,0,0.15);
+    }
+
+    /* Button 1 */
+    .btn-1 {
+        background: #3498db;
+        color: #fff;
+    }
+
+    .btn-1:hover {
+        background: #2980b9;
+    }
+
+    .btn-1:active {
+        background: #2980b9;
+        top: 2px;
+    }
+
+    .btn-1:before {
+        position: absolute;
+        height: 100%;
+        left: 0;
+        top: 0;
+        line-height: 3;
+        font-size: 140%;
+        width: 60px;
+    }
+
+</style>
